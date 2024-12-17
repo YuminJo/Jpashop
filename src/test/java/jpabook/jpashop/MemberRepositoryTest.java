@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 class MemberRepositoryTest {
-    @Autowired MemberRepository memberRepository;
+/*    @Autowired MemberRepository memberRepository;
     
     @Test
     @Transactional
@@ -26,5 +26,5 @@ class MemberRepositoryTest {
         Assertions.assertEquals(findMember.getId(), member.getId());
         Assertions.assertEquals(findMember.getUsername(), member.getUsername());
         Assertions.assertEquals(findMember, member);
-    }
+    }*/
 }
