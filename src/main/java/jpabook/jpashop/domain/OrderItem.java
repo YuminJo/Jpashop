@@ -2,11 +2,15 @@ package jpabook.jpashop.domain;
 
 import jakarta.persistence.*;
 import jpabook.jpashop.domain.item.Item;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+// OrderItem은 Order와 Item을 연결해주는 테이블이므로 OrderItem을 직접 생성하는 것을 막기 위해 protected로 생성자를 막아둔다.
 public class OrderItem {
     
     @Id @GeneratedValue
