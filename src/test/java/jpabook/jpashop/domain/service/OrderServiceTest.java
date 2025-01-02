@@ -21,7 +21,7 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 @Transactional
 class OrderServiceTest {
     //좋은 테스트는 db나 dependency를 사용하지 않는다.
-    //순수한 메서드의 단위 테스트를 해야한다.
+    //순수한 메서드의 **단위 테스트**를 해야한다. 단위 테스트가 중요.
     //하지만 현재 테스트는 전체적으로 잘 되는지 보기 위해 사용한다.
     
     @Autowired EntityManager em;
