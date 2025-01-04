@@ -45,4 +45,13 @@ public class MemberService {
     public Member findOne(Long memberId) {
         return memberRepository.findOne(memberId);
     }
+
+    @Transactional
+    public void update(Long id, String name) {
+        //Member를 반환하면 영속상태가 끊기기 때문에
+        //쿼리랑 커맨드랑 분리
+        //id 정도만 반환함.
+        Member member = memberRepository.findOne(id);
+        member.setName(name);
+    }
 }
