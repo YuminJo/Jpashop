@@ -9,11 +9,43 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequiredArgsConstructor
 public class MemberApiController {
     
     private final MemberService memberService;
+    
+    //잘못된 API 버전 관리 방법
+    @GetMapping("/api/v1/members")
+    public List<Member> membersV1() {
+        return memberService.findMembers();
+    }
+    
+    @GetMapping("/api/v2/members")
+    public Result membersV2() {
+        List<Member> findMembers = memberService.findMembers();
+        List<MemberDto> collect = findMembers.stream()
+            .map(m -> new MemberDto(m.getName()))
+            .collect(Collectors.toList());
+        
+        //이런식으로 해야함 List로 보내면 Json 형태로 바로 나가서 유연성이 떨어짐
+        return new Result(collect);
+    }
+    
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private T data;
+    }
+    
+    @Data
+    @AllArgsConstructor
+    static class MemberDto {
+        private String name;
+    }
     
     //첫번째 버전의 API
     @PostMapping("/api/v1/members")
