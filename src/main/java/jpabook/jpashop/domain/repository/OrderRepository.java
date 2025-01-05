@@ -89,4 +89,25 @@ public class OrderRepository {
         }
         return query.getResultList();
     }
+
+    public List<Order> findAllWithMemberDelivery() {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class
+        ).getResultList();
+        // Order를 조회할 때 연관된 Member와 Delivery를 함께 조회
+        // fetch 는 Jpa만 지원하는 기능이다.
+        // 실무에서 Jpa쓰기 위해서는 100% 알아야 한다.
+    }
+
+    public List<SimpleOrderQueryDto> findOrderDtos() {
+        // Controller 의존관계 생기면 안된다.
+        return em.createQuery(
+                "select new jpabook.jpashop.domain.repository.SimpleOrderQueryDto(o.id, m.name, o.orderDate, o.status, d.address) " +
+                        "from Order o" +
+                        " join o.member m" +
+                        " join o.delivery d", SimpleOrderQueryDto.class
+        ).getResultList();
+    }
 }
