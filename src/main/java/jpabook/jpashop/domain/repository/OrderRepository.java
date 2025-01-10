@@ -110,4 +110,27 @@ public class OrderRepository {
                         " join o.delivery d", SimpleOrderQueryDto.class
         ).getResultList();
     }
+    
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join fetch oi.item i", Order.class
+        )
+                .setFirstResult(1)
+                .setMaxResults(100)
+                .getResultList();
+        // Order 데이터 자체가 OrderItem과 Item을 가지고 있으므로 중복이 발생할 수 있다.
+        // Join은 1대다 관계에서 데이터가 뻥튀기 되는 현상이 발생할 수 있다.
+        // distinct를 사용하면 중복을 제거할 수 있다.
+        // distinct는 완벽히 동일한 엔티티가 조회되어야만 중복을 제거한다.
+        // distinct를 사용하면 SQL에 distinct를 추가하고, SQL 결과에 엔티티 중복이 있으면 애플리케이션에서 추가적으로 중복을 제거한다.
+        
+        // 컬렉션 페치 조인을 사용하면 페이징이 불가능하다.
+        // 컬렉션 페치 조인을 사용하면 일대다 조인이 일어나는데, 일대다 조인을 페이징하면 데이터가 뻥튀기 되기 때문에 원하는 결과가 나오지 않는다.
+        // 메모리에서 페이징 해버린다.(매우 위험)
+        // 컬렉션 페치 조인은 1개만 사용할 수 있다.
+    }
 }

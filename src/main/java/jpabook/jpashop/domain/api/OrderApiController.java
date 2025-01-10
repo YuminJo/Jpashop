@@ -37,9 +37,30 @@ public class OrderApiController {
     }
     
     // DTO를 사용한 최적화
+    // 쿼리가 끔찍하게 많이 나감
     @GetMapping("/api/v2/orders")
     public List<OrderDto> ordersV2() {
         List<Order> orders = orderRepository.findAllByString(new OrderSearch());
+        List<OrderDto> collect = orders.stream()
+                .map(OrderDto::new)
+                .collect(Collectors.toList());
+        
+        return collect;
+    }
+    
+    @GetMapping("/api/v3/orders")
+    public List<OrderDto> ordersV3() {
+        List<Order> orders = orderRepository.findAllWithItem();
+        List<OrderDto> collect = orders.stream()
+                .map(OrderDto::new)
+                .collect(Collectors.toList());
+        
+        return collect;
+    }
+    
+    @GetMapping("/api/v3.1/orders")
+    public List<OrderDto> ordersV3_page() {
+        List<Order> orders = orderRepository.findAllWithMemberDelivery();
         List<OrderDto> collect = orders.stream()
                 .map(OrderDto::new)
                 .collect(Collectors.toList());
