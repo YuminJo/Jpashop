@@ -133,4 +133,14 @@ public class OrderRepository {
         // 메모리에서 페이징 해버린다.(매우 위험)
         // 컬렉션 페치 조인은 1개만 사용할 수 있다.
     }
+
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                        "select o from Order o" +
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
 }
